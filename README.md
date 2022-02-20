@@ -1,4 +1,4 @@
-# Automate-Spotify-Signup
+# Automate Spotify Signup and other websites
 If you are lazy like me and you like automating boring stuff, then this script is made for people like us.
 
 
