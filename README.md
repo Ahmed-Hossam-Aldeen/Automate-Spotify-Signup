@@ -8,3 +8,8 @@ I used selenium to run the websites on msedge feel free to change the browser
 
 https://user-images.githubusercontent.com/61332730/154301055-6ea080d5-1f67-4ce2-a2ff-35f20746ac55.mp4
 
+
+## Running Egybest script
+
+https://user-images.githubusercontent.com/61332730/154860901-7928c92f-49f5-40ff-9a20-24e1e808cc54.mp4
+
