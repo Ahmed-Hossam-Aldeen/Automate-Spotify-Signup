@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 
 movie = input("Enter movie name: ")
 i = int(input("1. 1080p \n2. 720p\n3. 480p\n4. 360p\n"))
-
+#choice =int(input("1.Download \n 2.Li"))
 
 from msedge.selenium_tools import Edge, EdgeOptions
 options = EdgeOptions()
@@ -43,3 +43,8 @@ time.sleep(3)
 driver.switch_to.window(driver.window_handles[1])
 VidStream = driver.find_element_by_xpath("//i[ @class='ico-down-circle']")
 VidStream.click()
+
+driver.switch_to.window(driver.window_handles[1])
+elems = driver.find_elements_by_xpath("//a[@class='bigbutton']")
+links = [elem.get_attribute('href') for elem in elems]
+print("Download Link: "+links[0])
