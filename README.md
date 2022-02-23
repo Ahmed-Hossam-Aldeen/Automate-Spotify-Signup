@@ -10,6 +10,7 @@ https://user-images.githubusercontent.com/61332730/154301055-6ea080d5-1f67-4ce2-
 
 
 ## Running Egybest script
+I just enter the movie name and the script does the rest for me
 
 https://user-images.githubusercontent.com/61332730/154860901-7928c92f-49f5-40ff-9a20-24e1e808cc54.mp4
 
