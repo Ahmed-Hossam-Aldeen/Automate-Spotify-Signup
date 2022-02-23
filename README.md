@@ -4,6 +4,9 @@ If you are lazy like me and you like automating boring stuff, then this script i
 
 I used selenium to run the websites on msedge feel free to change the browser
 
+# How to use
+first download msedge folder and add it to the PATH in the enviroment variables, then run the script
+
 ## Running the script
 
 https://user-images.githubusercontent.com/61332730/154301055-6ea080d5-1f67-4ce2-a2ff-35f20746ac55.mp4
