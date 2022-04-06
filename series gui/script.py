@@ -3,7 +3,7 @@ import sys
 
 from PyQt5.uic.properties import QtCore
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
 
 import selenium
 from selenium import webdriver
@@ -14,7 +14,7 @@ import time
 from selenium.webdriver.common.keys import Keys
 
 import requests
-
+import urllib 
 class MainWindow(QtWidgets.QMainWindow):      
     def __init__(self):   
         super(MainWindow, self).__init__()
@@ -22,7 +22,41 @@ class MainWindow(QtWidgets.QMainWindow):
         self.Download.clicked.connect(self.download)
         self.setWindowTitle("Series downloader!")
         self.show() 
-           
+   
+
+    def Handel_Progress(self , blocknum , blocksize , totalsize):
+        ## calculate the progress
+        readed_data = blocknum * blocksize
+
+        if totalsize > 0 :
+            download_percentage = readed_data * 100 / totalsize
+            self.progressBar.setValue(download_percentage)
+            QApplication.processEvents()
+            
+    def Downloadz(self):
+        ## downloading any file
+        print('Start Download')
+
+        url = "https://dl114.afcbaaaff.xyz/?file=M3R4SUNiN3JsOHJ6WWQ3aTdPRFA4NW1rRVJIODh0ZDgzZlJwZ2pSN1JJa2Q0Nmwya3J6Mlp1MFdhLzlYaUs3N1ZJWUFzQnFBTlBHdGUwcXQ3OTErRXphbHJwTmxtSFNLMTlabGVKNDBjays5dzdMbXNta3pxMU93V29HSVRlQVRTUzgrZ2hjbTkzN1c3cUNSblUyOWtsdm9neFhHVFhOUGxtTk9ITlNiMzVwYngwekhYUFRoM1pWTG9EYkxwSnhBMXZXaXBBRGl5Kzk3NnZwc1VWRmdacEpZbk1qVDB1Q1k0QlUvZ2R4Ty9CU1ZnY1NvSHJZREpveTdSbVlnWm5JWnArTC9DRjBaeWlwRDNVdjQ4N2MxNTNJTVphbDQ3VC9scjZhd05HN0lMWld2Q1lLU2QreS85UT09"
+        name="lol.mp4"
+
+        response = requests.get(url, stream=True)
+        size = response.headers['content-length']
+        print(size)
+        counter = 0
+        with open(name, "wb") as f:
+            for chunk in response.iter_content(chunk_size=int(int(size)/1024)):
+                counter = counter+1
+                if chunk:  # filter out keep-alive new chunks
+                    f.write(chunk)
+                    progress = counter*1024*1000/int(size)
+                    #print(progress)
+                    self.progressBar.setValue(progress)   
+                    QApplication.processEvents()
+
+
+        QMessageBox.information(self , "Download Completed" , "The Download Completed Successfully ")
+        self.progressBar.setValue(0)          
   
     def download(self):
         series = self.name.toPlainText()
@@ -77,15 +111,30 @@ class MainWindow(QtWidgets.QMainWindow):
         name = self.driver.find_elements_by_tag_name('h2')[0].text
         print("Episode Full name:\n" + name+'\n\n\n')      
         self.driver.quit()
+        url= links[0]
         
         
-        url = links[0]
+        #url = "https://a7-pl5-e5i6.vdst.one/dl/59038328bc7fca09caTCMNtHaI0mT2glV.W9J93Sua-HoGO53gNR5OEg__.NjA3WXE4bHNMOStlL0pEMFVkY1F2eldnYUNzejdXUTFSYXhmc0xqOWRUekV1a1dabEFmM2FDeGVKK1ZyYVRyTlZYaHVjMVVETGl2ZlJLSGZKbzduRGpKam03eGhxdysrRmFVR0FQcmUwb3p0dUVFYUZJZXJ1R092L1R1RWY5aHNrME16TmxMd1UwOTRJeVZOa2xaZzFGWFdpRnNUK0g5d3gxU3JpMlhNWVJUMWpTbGc1Wnl3VWRKV1VHRU41NWdlZnREaFQ1bWczeEZFK3NIMUdCR25mY1Y4cEd5TThyZ3hvQzkzMFpNU2RwQmZEZC9TU2xwSVA1YkFtR0V1MnA5dVlVbFdhNkVkWGpPblkvdEw0UWx3OWRXSk1QYms2Qll3SVpvakNPT244TG5zUkpobWxLNHJrSTNvaGJiZDBYNGlHNEpXczE4UnBPdDRZcThVN1FzQWlhTC9OMGprKzBjWExtMHVQa3BBbkRNeG5BQnRML055QVViYVJNamlNbUxEWXo5WHhPc3hodHQrSEp2ejZJWU82QmZDWVdTNy9TTk5aNVE9"
+        #url = "https://dl254.dlmate33.xyz/?file=M3R4SUNiN3JsOHJ6WWQ3aTdPRFA4NW1rRVJIOGs4a0J0SjRQL1Rsb1NwOWtnOFlOOHRlVWFJSUtDdjlLN0t6bk5ZY1JyUitkVllqT0VsM01rc0ZqR2lmS3N2SmwvQjZZdHFwNUhKRXBFektnM3NUeDB4VXZ6Ri9VTlpPSU1lQVRUQ0EraHhrbWkzTFc2S21SbUVLOWx5VG8veHpHU0h4UGtHMU9HYXlWcWNzRzJIbWZLZkh0MzVVNnZTZUw2c2NNaU5hRXV4VGkxckE3L1k1VFUxUWdOc0o3ajkrbitkL2NxM2NlcnNnNzEzendsclAyWHM0bFVxaU9MWEYzT3kxVXpNaXBXUU1PeGpjYjdHV3o4L0owdURSUUkvRW52RFBpditIL096dWFKZz09"
+
+        
         response = requests.get(url, stream=True)
+        size = int(response.headers['content-length'])
+        print(size)
+        counter = 0
         with open(name, "wb") as f:
-            for chunk in response.iter_content(chunk_size=512):
+            for chunk in response.iter_content(chunk_size=1024):
+                counter = counter+1
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
-        
+                    progress = counter*1024*100/(size)
+                    #print(progress)
+                    self.progressBar.setValue(progress)   
+                    QApplication.processEvents()
+
+
+        QMessageBox.information(self , "Download Completed" , "The Download Completed Successfully ")
+        self.progressBar.setValue(0)          
     
 app = 0            
 app = QtWidgets.QApplication(sys.argv)
