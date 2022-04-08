@@ -91,26 +91,34 @@ class MainWindow(QtWidgets.QMainWindow):
             
             
             #url = "https://a7-pl5-e5i6.vdst.one/dl/59038328bc7fca09caTCMNtHaI0mT2glV.W9J93Sua-HoGO53gNR5OEg__.NjA3WXE4bHNMOStlL0pEMFVkY1F2eldnYUNzejdXUTFSYXhmc0xqOWRUekV1a1dabEFmM2FDeGVKK1ZyYVRyTlZYaHVjMVVETGl2ZlJLSGZKbzduRGpKam03eGhxdysrRmFVR0FQcmUwb3p0dUVFYUZJZXJ1R092L1R1RWY5aHNrME16TmxMd1UwOTRJeVZOa2xaZzFGWFdpRnNUK0g5d3gxU3JpMlhNWVJUMWpTbGc1Wnl3VWRKV1VHRU41NWdlZnREaFQ1bWczeEZFK3NIMUdCR25mY1Y4cEd5TThyZ3hvQzkzMFpNU2RwQmZEZC9TU2xwSVA1YkFtR0V1MnA5dVlVbFdhNkVkWGpPblkvdEw0UWx3OWRXSk1QYms2Qll3SVpvakNPT244TG5zUkpobWxLNHJrSTNvaGJiZDBYNGlHNEpXczE4UnBPdDRZcThVN1FzQWlhTC9OMGprKzBjWExtMHVQa3BBbkRNeG5BQnRML055QVViYVJNamlNbUxEWXo5WHhPc3hodHQrSEp2ejZJWU82QmZDWVdTNy9TTk5aNVE9"
-            #url = "https://dl254.dlmate33.xyz/?file=M3R4SUNiN3JsOHJ6WWQ3aTdPRFA4NW1rRVJIOGs4a0J0SjRQL1Rsb1NwOWtnOFlOOHRlVWFJSUtDdjlLN0t6bk5ZY1JyUitkVllqT0VsM01rc0ZqR2lmS3N2SmwvQjZZdHFwNUhKRXBFektnM3NUeDB4VXZ6Ri9VTlpPSU1lQVRUQ0EraHhrbWkzTFc2S21SbUVLOWx5VG8veHpHU0h4UGtHMU9HYXlWcWNzRzJIbWZLZkh0MzVVNnZTZUw2c2NNaU5hRXV4VGkxckE3L1k1VFUxUWdOc0o3ajkrbitkL2NxM2NlcnNnNzEzendsclAyWHM0bFVxaU9MWEYzT3kxVXpNaXBXUU1PeGpjYjdHV3o4L0owdURSUUkvRW52RFBpditIL096dWFKZz09"
-
+           
             
-            response = requests.get(url, stream=True)
-            size = int(response.headers['content-length'])
-            print(size/1024/1024)
-            counter = 0
-            with open(name, "wb") as f:
-                for chunk in response.iter_content(chunk_size=1024):
-                    counter = counter+1
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
-                        progress = counter*1024*100/(size)
-                        #print(progress)
-                        self.progressBar.setValue(progress)   
+            r = requests.get(url, stream=True)
+            file_size = int(r.headers['content-length'])
+            print(file_size/1024/1024)
+            downloaded = 0
+            start = last_print = monotonic()
+            QApplication.processEvents()
+            with open(name, 'wb') as fp:
+                for chunk in r.iter_content(chunk_size=1024):
+                    downloaded += fp.write(chunk)
+                    now = monotonic()
+                    if now - last_print > 1:
+                        pct_done = round(downloaded / file_size * 100)
+                        speed = round(downloaded / (now - start) / 1024)
+                        #print(f'Download {pct_done}% done, avg speed {speed} kbps')
+                        remaining_time = int((file_size - downloaded)/speed/1024)
+
+                        self.progressBar.setValue(pct_done)
+                        self.speed_label.setText(f'Avg. speed: {speed} kbps')
+                        self.time_label.setText(f'Time remaining: {remaining_time} s')
                         QApplication.processEvents()
+                        last_print = now
 
 
+            self.progressBar.setValue(100)   
             QMessageBox.information(self , "Download Completed" , "The Download Completed Successfully ")
-            self.progressBar.setValue(0)          
+            self.progressBar.setValue(0)         
 
         except:
             self.driver.quit()
