@@ -161,8 +161,20 @@
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuchoose_location">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="action_choose_location"/>
+   </widget>
+   <addaction name="menuchoose_location"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_choose_location">
+   <property name="text">
+    <string>choose location</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

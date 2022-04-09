@@ -14,18 +14,23 @@ import time
 from selenium.webdriver.common.keys import Keys
 
 import requests
-import urllib 
+import urllib
 from time import monotonic 
 class MainWindow(QtWidgets.QMainWindow):      
     def __init__(self):   
         super(MainWindow, self).__init__()
         uic.loadUi('gui.ui', self)
+        self.action_choose_location.triggered.connect(self.openFileNameDialog) 
         self.Download.clicked.connect(self.download)
         self.setWindowTitle("Series downloader!")
         self.show() 
    
-       
+    def openFileNameDialog(self):
+        self.folder = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        print(self.folder)       
   
+
+
     def download(self):
 
         try:
@@ -100,7 +105,7 @@ class MainWindow(QtWidgets.QMainWindow):
             downloaded = 0
             start = last_print = monotonic()
             QApplication.processEvents()
-            with open(name, 'wb') as fp:
+            with open(self.folder+"/"+name, 'wb') as fp:
                 for chunk in r.iter_content(chunk_size=1024):
                     downloaded += fp.write(chunk)
                     now = monotonic()
