@@ -1,9 +1,9 @@
 # Automate Spotify Signup and other websites
 If you are lazy like me and you like automating boring stuff, then this script is made for people like us.
 
-
 I used selenium to run the websites on msedge feel free to change the browser
 
+Use this link to download the exe: https://drive.google.com/drive/folders/1qBhQcSK4bwo-E29mt3K6vJ43sfBkoVEf?usp=sharing
 # How to use
 1. Download msedge folder
 2. Add it to the PATH in the enviroment variables
